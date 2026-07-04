@@ -44,13 +44,17 @@ async def check(message: Message):
         # if lst:
         #     await core.bot.send_message(message.chat.id, "\n".join(lst))
         keyboard_rows = []
-        n = len(available_proxies)
         for i, url in enumerate(available_proxies, 1):
             btn = InlineKeyboardButton(text=f"{i}. Подключить ✅", url=url)
             keyboard_rows.append([btn])
 
-        markup = InlineKeyboardMarkup(inline_keyboard=keyboard_rows)
-        await msg.edit_text(f"Нашел {n} прокси:", reply_markup=markup)
+            if len(keyboard_rows) == 30 or i == len(available_proxies):
+                markup = InlineKeyboardMarkup(inline_keyboard=keyboard_rows)
+                await core.bot.send_message(message.chat.id, text=f"Лист прокси №{i // 30}", reply_markup=markup)
+                keyboard_rows = []
+
+
+
 
 
 async def health_monitor():
